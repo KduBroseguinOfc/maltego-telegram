@@ -19,12 +19,22 @@ class Config:
         except (configparser.NoSectionError, configparser.NoOptionError):
             return fallback
 
+    def get_bool(self, section, key, fallback=False):
+        try:
+            return self.config.getboolean(section, key)
+        except (configparser.NoSectionError, configparser.NoOptionError, ValueError):
+            return fallback
+
 
 config = Config()
 
 api_id = int(config.get("telegram", "api_id", fallback=0))
 api_hash = config.get("telegram", "api_hash", fallback="")
 bot_token = config.get("telegram", "bot_token", fallback="")
+
+test_tgscan_token = config.get("tgscan", "test_token", fallback="")
+prod_tgscan_token = config.get("tgscan", "prod_token", fallback="")
+tgscan_debug_mode = config.get_bool("tgscan", "debug", fallback="")
 
 limit = int(config.get("misc", "limit", fallback=0))
 
